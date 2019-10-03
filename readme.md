@@ -47,6 +47,8 @@ CREATE VIEW street_cafe_data_by_post_code AS
     ORDER BY post_code;
 ```
 
+Here is the SQL View:
+
 ![Alt text](lib/sql_view_for_street_cafes_by_post_code.png?raw=true "post_code SQL VIEW")
 
 I confirmed and verified it by testing a small subset in my Rails app at first, but when I made the full view, I checked a few post codes for having the right number of places, chairs and the right place with the most chairs. I tested the percentages by calling:
