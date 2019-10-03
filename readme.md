@@ -26,7 +26,36 @@ I added a varchar category column to the street_cafes table using a rails migrat
     - place_with_max_chairs: The name of the place with the most chairs in that Post Code
     -max_chairs: The number of chairs at the place_with_max_chairs
 
+I have not worked directly with SQL views in the past. I have always used queries in my models to display them in a Rails view, or as JSON. I'm going to start with a simple Rails method to make sure the query is right (I'll include a model test to ensure the accuracy of the query), and then when I confirm that I will investigate how exactly to create this as a an SQL view.
+
+I was able to construct an SQL query that created the columns mentioned above. I tested it using a model test in Rails for a class method on the StreetCafe object. I then used Rails DB to test it out and created an SQL view there.
+
     *Please also include a brief description of how you verified #4*
+
+The SQL I used to generate the view was:
+
+```
+CREATE VIEW street_cafe_data_by_post_code AS
+  SELECT post_code,
+    COUNT(street_address) as total_places,
+    SUM(number_of_chairs) as total_chairs,
+    MAX(number_of_chairs) as max_chairs,
+    ROUND((SUM(number_of_chairs)*100.0 / (SELECT SUM(number_of_chairs) FROM street_cafes) ), 2) as chairs_pct,
+    (SELECT "café/restaurant_name" FROM street_cafes sc2 WHERE sc2.post_code = sc1.post_code ORDER BY number_of_chairs DESC LIMIT 1) as place_with_max_chairs
+    FROM street_cafes sc1
+    GROUP BY post_code
+    ORDER BY post_code;
+```
+
+![Alt text](lib/sql_view_for_street_cafes_by_post_code.png?raw=true "post_code SQL VIEW")
+
+I confirmed and verified it by testing a small subset in my Rails app at first, but when I made the full view, I checked a few post codes for having the right number of places, chairs and the right place with the most chairs. I tested the percentages by calling:
+
+```
+SELECT SUM(street_cafe_data_by_post_code.chairs_pct) FROM street_cafe_data_by_post_code;
+```
+
+on the view and seeing that it totaled 100.0.
 
 5) Write a Rails script to categorize the cafes and write the result to the category according to the rules:[provide the script]
     - If the Post Code is of the LS1 prefix type:
