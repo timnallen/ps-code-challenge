@@ -26,6 +26,8 @@ I added a varchar category column to the street_cafes table using a rails migrat
     - place_with_max_chairs: The name of the place with the most chairs in that Post Code
     -max_chairs: The number of chairs at the place_with_max_chairs
 
+I have not worked directly with SQL views in the past. I have always used queries in my models to display them in a Rails view, or as JSON. I'm going to start with a simple Rails method to make sure the query is right (I'll include a model test to ensure the accuracy of the query), and then when I confirm that I will investigate how exactly to create this as a an SQL view.
+
     *Please also include a brief description of how you verified #4*
 
 5) Write a Rails script to categorize the cafes and write the result to the category according to the rules:[provide the script]
