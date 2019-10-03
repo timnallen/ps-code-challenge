@@ -16,6 +16,8 @@ I was able to successfully import the data into my development DB. I confirmed i
 
 3) Add a varchar column to the table called `category`.
 
+I added a varchar category column to the street_cafes table using a rails migration. I will commit.
+
 4) Create a view with the following columns[provide the view SQL]
     - post_code: The Post Code
     - total_places: The number of places in that Post Code
