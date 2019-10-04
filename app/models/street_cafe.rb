@@ -12,8 +12,14 @@ class StreetCafe < ApplicationRecord
   end
 
   def self.data_by_category
-    select('category, COUNT(id) as total_places, SUM(number_of_chairs) as total_chairs')
-    .group(:category)
-    .order(:category)
+    ActiveRecord::Base.connection.execute('SELECT category,
+      COUNT(id) as total_places,
+      SUM(number_of_chairs) as total_chairs
+      FROM street_cafes
+      GROUP BY category
+      ORDER BY category;').values
+    # select('category, COUNT(id) as total_places, SUM(number_of_chairs) as total_chairs')
+    # .group(:category)
+    # .order(:category)
   end
 end

@@ -99,7 +99,32 @@ I also evaluated the task worked properly by playing around in my developer data
     - total_places: The number of places in that category
     - total_chairs: The total chairs in that category
 
-Similarly to number 4, I am going to build a class method for street cafes and unit test it first.
+Similarly to number 4, I am going to build a class method for street cafes and unit test it first. I have committed that.
+
+I will construct the view in Rails DB with the SQL and post it here with the query, view and results:
+
+Query:
+```
+CREATE VIEW street_cafe_data_by_category AS
+  SELECT category,
+    COUNT(id) as total_places,
+    SUM(number_of_chairs) as total_chairs
+    FROM street_cafes
+    GROUP BY category
+    ORDER BY category;
+```
+View:
+
+![Alt text](lib/sql_view_for_street_cafes_by_category.png?raw=true "category SQL VIEW")
+
+Results:
+
+ls1 large: 1 place, 152 chairs
+ls1 medium: 49 places, 1223 chairs
+ls1 small: 11 places, 64 chairs
+ls2 large: 5 places, 489 chairs
+ls2 small: 5 places, 84 chairs
+other: 2 places, 67 chairs
 
 7) Write a script in rails to:
     - For street_cafes categorized as small, write a script that exports their data to a csv and deletes the records
