@@ -2,11 +2,11 @@
 
 ### Welcome to the take home portion of your interview! We're excited to jam through some technical stuff with you, but first it'll help to get a sense of how you work through data and coding problems. Work through what you can independently, but do feel free to reach out if you have blocking questions or problems.
 
-1) This requires Postgres (9.4+) & Rails(4.2+), so if you don't already have both installed, please install them.
+#### 1) This requires Postgres (9.4+) & Rails(4.2+), so if you don't already have both installed, please install them.
 
 I've started by creating a Rails app with a Postgres database and added the forked repo as the remote. I'm going to detail my process in this README as I move down the list. My first commit was after initializing the Rails application.
 
-2) Download the data file from: https://github.com/gospotcheck/ps-code-challenge/blob/master/Street%20Cafes%202015-16.csv
+#### 2) Download the data file from: https://github.com/gospotcheck/ps-code-challenge/blob/master/Street%20Cafes%202015-16.csv
 
 I have pulled down the README and CSV file and I'm going to make a rake task to import it into the Postgres DB. Before I do that, I need to make the table. I generated the model and migration and had to use an inflection support to keep it from pluralizing street cafes to street "caves". I created the rake task using the CSV::foreach method to put them in the database. I used header converters to match the headers to the lower_and_snake_cased table columns. I had to manually replace the unnamed column with a name I picked, 'notes'. Only one cafe has a value for this. I also renamed the café name column because the accent wasn't being read correctly.
 
@@ -14,19 +14,19 @@ In a real scenario, if I had access to the CSV file on my system like I do, I wo
 
 I was able to successfully import the data into my development DB. I confirmed it using the Rails Console. I will commit my progress.
 
-3) Add a varchar column to the table called `category`.
+#### 3) Add a varchar column to the table called `category`.
 
 I added a varchar category column to the street_cafes table using a rails migration. I will commit.
 
-4) Create a view with the following columns[provide the view SQL]
+#### 4) Create a view with the following columns[provide the view SQL]
     - post_code: The Post Code
     - total_places: The number of places in that Post Code
     - total_chairs: The total number of chairs in that Post Code
     - chairs_pct: Out of all the chairs at all the Post Codes, what percentage does this Post Code represent (should sum to 100% in the whole view)
     - place_with_max_chairs: The name of the place with the most chairs in that Post Code
-    -max_chairs: The number of chairs at the place_with_max_chairs
+    - max_chairs: The number of chairs at the place_with_max_chairs
 
-I have not worked directly with SQL views in the past. I have always used queries in my models to display them in a Rails view, or as JSON. I'm going to start with a simple Rails method to make sure the query is right (I'll include a model test to ensure the accuracy of the query), and then when I confirm that I will investigate how exactly to create this as a an SQL view.
+I have not worked directly with SQL views in the past. I have always used queries in my models to display them in a Rails view, or as JSON. I'm going to start with a simple Rails method to make sure the query is right (I'll include a model test to ensure the accuracy of the query), and then when I confirm that I will investigate how exactly to create this as a SQL view.
 
 I was able to construct an SQL query that created the columns mentioned above. I tested it using a model test in Rails for a class method on the StreetCafe object. I then used Rails DB to test it out and created an SQL view there.
 
@@ -59,7 +59,7 @@ SELECT SUM(street_cafe_data_by_post_code.chairs_pct) FROM street_cafe_data_by_po
 
 on the view and seeing that it totaled 100.0.
 
-5) Write a Rails script to categorize the cafes and write the result to the category according to the rules:[provide the script]
+#### 5) Write a Rails script to categorize the cafes and write the result to the category according to the rules:[provide the script]
     - If the Post Code is of the LS1 prefix type:
         - `# of chairs less than 10: category = 'ls1 small'`
         - `# of chairs greater than or equal to 10, less than 100: category = 'ls1 medium'`
@@ -85,16 +85,23 @@ namespace :categorize do
   end
 end
 ```
+Task: https://github.com/timnallen/ps-code-challenge/blob/master/lib/tasks/categorize.rake
 
-And the class is: app/models/cafe_categorizer.rb
+```
+rake categorize:street_cafes
+```
+
+And the class is: https://github.com/timnallen/ps-code-challenge/blob/master/app/models/cafe_categorizer.rb
 
     *Please share any tests you wrote for #5*
 
-I had never written a test for a task before, so I did some research and found I could unit test the class I created and perform the functionality all inside the model layer. The tests evaluated each case. The test is in the repo at: /spec/models/cafe_categorizer_spec.rb
+I had never written a test for a task before, so I did some research and found I could unit test the class I created and perform the functionality all inside the model layer. The tests evaluated each case. The test is in the repo at:
+
+https://github.com/timnallen/ps-code-challenge/blob/master//spec/models/cafe_categorizer_spec.rb
 
 I also evaluated the task worked properly by playing around in my developer database with Rails C. I even dropped everything, re-imported everything and ran it again to the same results.
 
-6) Write a custom view to aggregate the categories [provide view SQL AND the results of this view]
+#### 6) Write a custom view to aggregate the categories [provide view SQL AND the results of this view]
     - category: The category column
     - total_places: The number of places in that category
     - total_chairs: The total chairs in that category
@@ -126,7 +133,7 @@ ls2 large: 5 places, 489 chairs
 ls2 small: 5 places, 84 chairs
 other: 2 places, 67 chairs
 
-7) Write a script in rails to:
+#### 7) Write a script in rails to:
     - For street_cafes categorized as small, write a script that exports their data to a csv and deletes the records
     - For street cafes categorized as medium or large, write a script that concatenates the category name to the beginning of the name and writes it back to the name column
 
@@ -154,10 +161,19 @@ namespace :export_and_delete do
   end
 end
 ```
+Task: https://github.com/timnallen/ps-code-challenge/blob/master/lib/tasks/export_and_delete.rake
+
+```
+rake export_and_delete:small_street_cafes
+```
 
 The corresponding class built for this lives in:
 
-app/model/cafe_exporter.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/app/model/cafe_exporter.rb
+
+The file has been created in the base folder:
+
+https://github.com/timnallen/ps-code-challenge/blob/master/small-cafes-2019-10-04.csv
 
 The task to rename the medium and large ones is:
 
@@ -175,21 +191,31 @@ namespace :rename do
 end
 ```
 
+Task: https://github.com/timnallen/ps-code-challenge/blob/master/lib/tasks/rename.rake
+
+```
+rake rename:medium_and_large_street_cafes
+```
+
 The corresponding class built for this lives in:
 
-app/model/name_adjuster.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/app/model/name_adjuster.rb
 
     *Please share any tests you wrote for #7*
 
 I wrote several unit tests for this step found at:
 
-spec/models/cafe_exporter_spec.rb
-spec/models/name_adjuster_spec.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/spec/models/cafe_exporter_spec.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/spec/models/name_adjuster_spec.rb
 
 and included a fixture to compare to the newly created CSV:
 
-spec/fixtures/fake.csv
+https://github.com/timnallen/ps-code-challenge/blob/master/spec/fixtures/fake.csv
 
-8) Show your work and check your email for submission instructions.
+#### 8) Show your work and check your email for submission instructions.
 
-9) Celebrate, you did great!
+I sincerely hope this is along the lines of what you were looking for in terms of submission. I enjoyed this exercise as I had to learn how to do a few things for the first time, including: creating a SQL view directly (which I hope this was what you meant by this), and exporting data to CSVs. I also had to figure out how to subquery in order to solve the first SQL query. Please let me know if you have any questions or would like me to rework or update a few things. I'm eager to learn more about the best practices and solutions for these problems!
+
+#### 9) Celebrate, you did great!
+
+Will do! Thanks!
