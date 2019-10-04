@@ -70,7 +70,29 @@ on the view and seeing that it totaled 100.0.
     - For Post Code is something else:
         - `category = 'other'`
 
+For this, I created a class called CafeCategorizer that handled the logic for categorizing cafes and updating the db with the category. Both the script and class are in this repo in the /lib/tasks/categorize.rake file and app/models/cafe_categorizer.rb file, respectively. The script is:
+
+```
+namespace :categorize do
+  desc 'categorize cafes by code and size'
+  task street_cafes: :environment do
+    cafes = StreetCafe.all
+    cafes.each do |cafe|
+      cc = CafeCategorizer.new(cafe)
+      cc.add_category_to_cafe
+    end
+    puts "Cafes have been categorized!"
+  end
+end
+```
+
+And the class is: app/models/cafe_categorizer.rb
+
     *Please share any tests you wrote for #5*
+
+I had never written a test for a task before, so I did some research and found I could unit test the class I created and perform the functionality all inside the model layer. The tests evaluated each case. The test is in the repo at: /spec/models/cafe_categorizer_spec.rb
+
+I also evaluated the task worked properly by playing around in my developer database with Rails C. I even dropped everything, re-imported everything and ran it again to the same results.
 
 6) Write a custom view to aggregate the categories [provide view SQL AND the results of this view]
     - category: The category column
