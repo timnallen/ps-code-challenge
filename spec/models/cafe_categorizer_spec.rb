@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CafeCategorizer, type: :model do
   describe 'add_category_to_cafe' do
     it 'ls1 small' do
-      all_bar_one = StreetCafe.create('café/restaurant_name': 'All Bar One', street_address: '27 East Parade', post_code: 'LS1 5BN', number_of_chairs: 9)
+      all_bar_one = StreetCafe.create(name: 'All Bar One', street_address: '27 East Parade', post_code: 'LS1 5BN', number_of_chairs: 9)
 
       all_bar_one_categorizer = CafeCategorizer.new(all_bar_one)
       all_bar_one_categorizer.add_category_to_cafe
@@ -13,7 +13,7 @@ describe CafeCategorizer, type: :model do
 
     it 'ls1 medium' do
 
-      bar_two = StreetCafe.create('café/restaurant_name': 'Bar Two', street_address: '123 Fake', post_code: 'LS1 5BN', number_of_chairs: 45)
+      bar_two = StreetCafe.create(name: 'Bar Two', street_address: '123 Fake', post_code: 'LS1 5BN', number_of_chairs: 45)
 
       bar_two_categorizer = CafeCategorizer.new(bar_two)
       bar_two_categorizer.add_category_to_cafe
@@ -22,7 +22,7 @@ describe CafeCategorizer, type: :model do
     end
 
     it 'ls1 large' do
-      bar_three = StreetCafe.create('café/restaurant_name': 'Bar Three', street_address: '123 Fake', post_code: 'LS1 5BN', number_of_chairs: 145)
+      bar_three = StreetCafe.create(name: 'Bar Three', street_address: '123 Fake', post_code: 'LS1 5BN', number_of_chairs: 145)
 
       bar_three_categorizer = CafeCategorizer.new(bar_three)
       bar_three_categorizer.add_category_to_cafe
@@ -31,10 +31,10 @@ describe CafeCategorizer, type: :model do
     end
 
     it 'ls2 all' do
-      bar_four = StreetCafe.create('café/restaurant_name': 'Bar Four', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 20)
-      StreetCafe.create('café/restaurant_name': 'Bar', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 40)
-      untouched_bar = StreetCafe.create('café/restaurant_name': 'Bar', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 60)
-      bar_five = StreetCafe.create('café/restaurant_name': 'Bar Five', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 80)
+      bar_four = StreetCafe.create(name: 'Bar Four', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 20)
+      StreetCafe.create(name: 'Bar', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 40)
+      untouched_bar = StreetCafe.create(name: 'Bar', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 60)
+      bar_five = StreetCafe.create(name: 'Bar Five', street_address: '123 Fake', post_code: 'LS2 456', number_of_chairs: 80)
 
       bar_four_categorizer = CafeCategorizer.new(bar_four)
       bar_four_categorizer.add_category_to_cafe
@@ -49,7 +49,7 @@ describe CafeCategorizer, type: :model do
     end
 
     it 'other' do
-      far_bar = StreetCafe.create('café/restaurant_name': 'Far Bar', street_address: '123 Fake', post_code: 'LS10 456', number_of_chairs: 40)
+      far_bar = StreetCafe.create(name: 'Far Bar', street_address: '123 Fake', post_code: 'LS10 456', number_of_chairs: 40)
 
       far_bar_categorizer = CafeCategorizer.new(far_bar)
       far_bar_categorizer.add_category_to_cafe

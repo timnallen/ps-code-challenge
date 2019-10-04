@@ -130,7 +130,65 @@ other: 2 places, 67 chairs
     - For street_cafes categorized as small, write a script that exports their data to a csv and deletes the records
     - For street cafes categorized as medium or large, write a script that concatenates the category name to the beginning of the name and writes it back to the name column
 
+I will start with the latter using the same method used in number 5.
+
+The café/restaurant_name column has finally caught up with me. I cannot access the property with the name as is using ruby methods, so I will change the column name (to 'name'). I'll need to go back and adjust the some queries and tests.
+
+I have made a StreetCafe class method to get all the medium and large cafes and a NameAdjuster class that concatenates the category to the front of the name column.
+
+I need a StreetCafe class method to fetch only small cafes, an exporter function and a delete function. The latter two can perhaps be methods in the same CafeExporter class. I can turn the small cafe class method into the same method as the medium and large with a different argument.
+
+I have made and tested a method to generate the CSV and to delete the records. They have been unit tested and I have manually tested the rake task multiple times.
+
+The task to export and delete the small cafes is:
+
+```
+namespace :export_and_delete do
+  desc 'exports small Street Cafes into CSV and expunges them'
+  task small_street_cafes: :environment do
+    exporter = CafeExporter.new(StreetCafe.cafes_by_size('small'))
+    csv = exporter.export_to_csv
+    File.write("small-cafes-#{Date.today}.csv", csv)
+    exporter.expunge_from_database
+    puts 'Small Street Cafes exported and expunged from the database!'
+  end
+end
+```
+
+The corresponding class built for this lives in:
+
+app/model/cafe_exporter.rb
+
+The task to rename the medium and large ones is:
+
+```
+namespace :rename do
+  desc 'rename medium and large street cafes to include category'
+  task medium_and_large_street_cafes: :environment do
+    medium_and_large_cafes = StreetCafe.cafes_by_size('medium', 'large')
+    medium_and_large_cafes.each do |cafe|
+      name_adjuster = NameAdjuster.new(cafe)
+      name_adjuster.adjust_names
+    end
+    puts 'Medium and large street cafes renamed!'
+  end
+end
+```
+
+The corresponding class built for this lives in:
+
+app/model/name_adjuster.rb
+
     *Please share any tests you wrote for #7*
+
+I wrote several unit tests for this step found at:
+
+spec/models/cafe_exporter_spec.rb
+spec/models/name_adjuster_spec.rb
+
+and included a fixture to compare to the newly created CSV:
+
+spec/fixtures/fake.csv
 
 8) Show your work and check your email for submission instructions.
 

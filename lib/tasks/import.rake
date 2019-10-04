@@ -8,7 +8,7 @@ namespace :import do
                   header_converters: lambda { |hdr| hdr.downcase.gsub(' ', '_') }) do |row|
       cafe_data = row.to_h
       cafe_data['notes'] = cafe_data.delete(nil)
-      cafe_data['café/restaurant_name'] = cafe_data.delete('cafï¿½/restaurant_name')
+      cafe_data['name'] = cafe_data.delete('cafï¿½/restaurant_name')
       StreetCafe.create(cafe_data)
     end
     puts 'Street Cafes imported to the database!'
