@@ -169,7 +169,7 @@ rake export_and_delete:small_street_cafes
 
 The corresponding class built for this lives in:
 
-https://github.com/timnallen/ps-code-challenge/blob/master/app/model/cafe_exporter.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/app/models/cafe_exporter.rb
 
 The file has been created in the base folder:
 
@@ -199,7 +199,7 @@ rake rename:medium_and_large_street_cafes
 
 The corresponding class built for this lives in:
 
-https://github.com/timnallen/ps-code-challenge/blob/master/app/model/name_adjuster.rb
+https://github.com/timnallen/ps-code-challenge/blob/master/app/models/name_adjuster.rb
 
     *Please share any tests you wrote for #7*
 
